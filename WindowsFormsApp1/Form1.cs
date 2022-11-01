@@ -13,37 +13,27 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        public string sum { get; }
-        public string fio { get; }
-        auth iniz;
 
         public Form1()
         {
             InitializeComponent();
         }
-
-        public class auth
-        {
-            public string fio;
-            public int sum;
-
-            public auth(string FIO, int SUM)
-            {
-                fio = FIO;
-                sum = SUM;
-            }
-        }
+        Account ac;
 
         private void button2_Click(object sender, EventArgs e)
         {
-            // создаем банковский счет
-            Account account = new Account(Convert.ToInt32(textBox2.Text));
-            // Добавляем в делегат ссылку на метод PrintSimpleMessage
-            account.RegisterHandler(PrintSimpleMessage);
-            // Два раза подряд пытаемся снять деньги
-            account.Take(Convert.ToInt32(textBox3.Text));
-            void PrintSimpleMessage(string message) => listBox1.Items.Add(message);
-
+            int x = Convert.ToInt32(textBox3.Text);
+            if (ac.sum < x)
+            {
+                listBox1.Items.Clear();
+                listBox1.Items.Add("На счету недосатточно средств");
+            }
+            else
+            {
+                ac.Take(Convert.ToInt32(textBox3.Text));
+                listBox1.Items.Clear();
+                listBox1.Items.Add($"Владелец: {ac.fio}, счет: {ac.sum}");
+            }
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -53,13 +43,9 @@ namespace WindowsFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            // создаем банковский счет
-            Account account = new Account(Convert.ToInt32(textBox2.Text));
-            // Добавляем в делегат ссылку на метод PrintSimpleMessage
-            account.RegisterHandler(PrintSimpleMessage);
-            // Два раза подряд пытаемся снять деньги
-            account.Add(Convert.ToInt32(textBox3.Text));
-            void PrintSimpleMessage(string message) => listBox1.Items.Add(message);
+            ac.Add(Convert.ToInt32(textBox3.Text));
+            listBox1.Items.Clear();
+            listBox1.Items.Add($"Владелец: {ac.fio}, счет: {ac.sum}");
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -74,7 +60,17 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            iniz = new auth(fio, Convert.ToInt32(sum));
+            ac = new Account(Convert.ToInt32(textBox2.Text), textBox1.Text);
+            listBox1.Items.Clear();
+            listBox1.Items.Add($"Владелец: {ac.fio}, счет: {ac.sum}");
+            button2.Visible = true;
+            button3.Visible = true;
+            textBox3.Visible = true;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

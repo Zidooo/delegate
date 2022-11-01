@@ -8,37 +8,31 @@ namespace ClassLibrary1
 {
     public class Class1
     {
-        // Объявляем делегат
         public delegate void AccountHandler(string message);
         public class Account
         {
-            int sum;
+            public int sum;
+            public string fio;
             // Создаем переменную делегата
             AccountHandler taken;
-            public Account(int sum)
+            public Account(int sum, string fio)
             {
                 this.sum = sum;
+                this.fio = fio;
             }
-
             // Регистрируем делегат
             public void RegisterHandler(AccountHandler del)
             {
                 taken = del;
             }
-            public void Add(int sum)
-            {
-                this.sum += sum;
-                taken?.Invoke($"К счету добалвено {sum} Баланс: {this.sum} у.е.");
-            }
-
-
+            public void Add(int sum) => this.sum += sum;
             public void Take(int sum)
             {
                 if (this.sum >= sum)
                 {
                     this.sum -= sum;
                     // вызываем делегат, передавая ему сообщение
-                    taken?.Invoke($"Со счета списано {sum} у.е. Баланс: {this.sum}");
+                    taken?.Invoke($"Со счета списано {sum} у.е.");
                 }
                 else
                 {
