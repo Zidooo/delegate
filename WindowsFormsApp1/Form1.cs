@@ -18,22 +18,32 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
         }
-        Account ac;
+        Account accc;
+        void DisplayMessage(Account sender, AccountEventArgs e)
+        {
+            MessageBox.Show($"Сумма транзакции: {e.Sum}");
+            MessageBox.Show(e.Message);
+            MessageBox.Show($"Текущая сумма на счете: {sender.sum}");
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
             int x = Convert.ToInt32(textBox3.Text);
-            if (ac.sum < x)
-            {
-                listBox1.Items.Clear();
-                listBox1.Items.Add("На счету недосатточно средств");
-            }
-            else
-            {
-                ac.Take(Convert.ToInt32(textBox3.Text));
-                listBox1.Items.Clear();
-                listBox1.Items.Add($"Владелец: {ac.fio}, счет: {ac.sum}");
-            }
+             if (accc.sum < x)
+             {
+                 accc.Notify += DisplayMessage;   // Добавляем обработчик для события Notify
+                 listBox1.Items.Clear();
+                 listBox1.Items.Add("На счету недосатточно средств");
+                 accc.Notify -= DisplayMessage;   // Добавляем обработчик для события Notify
+             }
+             else
+             {
+                 accc.Notify += DisplayMessage;   // Добавляем обработчик для события Notify
+                 accc.Take(Convert.ToInt32(textBox3.Text));
+                 listBox1.Items.Clear();
+                 listBox1.Items.Add($"Владелец: {accc.fio}, счет: {accc.sum}");
+                 accc.Notify -= DisplayMessage;   // Добавляем обработчик для события Notify
+             }
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -43,9 +53,11 @@ namespace WindowsFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ac.Add(Convert.ToInt32(textBox3.Text));
+            accc.Notify += DisplayMessage;   // Добавляем обработчик для события Notify
+            accc.Add(Convert.ToInt32(textBox3.Text));
             listBox1.Items.Clear();
-            listBox1.Items.Add($"Владелец: {ac.fio}, счет: {ac.sum}");
+            listBox1.Items.Add($"Владелец: {accc.fio}, счет: {accc.sum}");
+            accc.Notify -= DisplayMessage;   // Добавляем обработчик для события Notify
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -60,9 +72,9 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ac = new Account(Convert.ToInt32(textBox2.Text), textBox1.Text);
+            accc = new Account(Convert.ToInt32(textBox2.Text), textBox1.Text);
             listBox1.Items.Clear();
-            listBox1.Items.Add($"Владелец: {ac.fio}, счет: {ac.sum}");
+            listBox1.Items.Add($"Владелец: {accc.fio}, счет: {accc.sum}");
             button2.Visible = true;
             button3.Visible = true;
             textBox3.Visible = true;

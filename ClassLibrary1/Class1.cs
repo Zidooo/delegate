@@ -8,10 +8,12 @@ namespace ClassLibrary1
 {
     public class Class1
     {
-        public delegate void AccountHandler(string message);
+        public delegate void AccountHandler(Account sender, AccountEventArgs e);
+
         public class Account
         {
-            public int sum;
+            public event AccountHandler Notify;
+            public int sum { get; private set; }
             public string fio;
             // Создаем переменную делегата
             AccountHandler taken;
@@ -20,24 +22,45 @@ namespace ClassLibrary1
                 this.sum = sum;
                 this.fio = fio;
             }
-            // Регистрируем делегат
+
+
             public void RegisterHandler(AccountHandler del)
             {
-                taken = del;
+                taken += del;
             }
-            public void Add(int sum) => this.sum += sum;
+
+
+
+            public void Add(int sum)
+            {
+                this.sum += sum;
+                Notify?.Invoke(this, new AccountEventArgs($"На счет поступило {sum}", sum));
+            }
+
             public void Take(int sum)
             {
                 if (this.sum >= sum)
                 {
                     this.sum -= sum;
                     // вызываем делегат, передавая ему сообщение
-                    taken?.Invoke($"Со счета списано {sum} у.е.");
+                    Notify?.Invoke(this, new AccountEventArgs($"Сумма {sum} снята со счета", sum));
                 }
                 else
                 {
-                    taken?.Invoke($"Недостаточно средств. Баланс: {this.sum} у.е.");
+                    Notify?.Invoke(this, new AccountEventArgs("Недостаточно денег на счете", sum));
                 }
+            }
+        }
+        public class AccountEventArgs
+        {
+            // Сообщение
+            public string Message { get; }
+            // Сумма, на которую изменился счет
+            public int Sum { get; }
+            public AccountEventArgs(string message, int sum)
+            {
+                Message = message;
+                Sum = sum;
             }
         }
     }
