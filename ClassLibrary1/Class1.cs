@@ -34,7 +34,7 @@ namespace ClassLibrary1
             public void Add(int sum)
             {
                 this.sum += sum;
-                Notify?.Invoke(this, new AccountEventArgs($"На счет поступило {sum}", sum));
+                Notify?.Invoke(this, new AccountEventArgs($"На счет поступило: {sum} руб.", sum));
             }
 
             public void Take(int sum)

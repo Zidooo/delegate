@@ -21,9 +21,7 @@ namespace WindowsFormsApp1
         Account accc;
         void DisplayMessage(Account sender, AccountEventArgs e)
         {
-            MessageBox.Show($"Сумма транзакции: {e.Sum}");
-            MessageBox.Show(e.Message);
-            MessageBox.Show($"Текущая сумма на счете: {sender.sum}");
+            MessageBox.Show($"Владелец счета: {accc.fio}\nСумма транзакции: {e.Sum} руб.\n"+ e.Message+$"\nТекущая сумма на счете: {sender.sum} руб.");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -33,7 +31,7 @@ namespace WindowsFormsApp1
              {
                  accc.Notify += DisplayMessage;   // Добавляем обработчик для события Notify
                  listBox1.Items.Clear();
-                 listBox1.Items.Add("На счету недосатточно средств");
+                 listBox1.Items.Add("На счету недостаточно средств");
                  accc.Notify -= DisplayMessage;   // Добавляем обработчик для события Notify
              }
              else
