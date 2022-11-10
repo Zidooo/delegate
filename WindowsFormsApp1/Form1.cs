@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ClassLibrary1.Class1;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace WindowsFormsApp1
 {
@@ -33,7 +34,10 @@ namespace WindowsFormsApp1
                  listBox1.Items.Clear();
                  listBox1.Items.Add("На счету недостаточно средств");
                  accc.Notify -= DisplayMessage;   // Добавляем обработчик для события Notify
-             }
+                new ToastContentBuilder()
+                .AddText($"На счету недостаточно средств")
+                .Show();
+            }
              else
              {
                  accc.Notify += DisplayMessage;   // Добавляем обработчик для события Notify
@@ -41,8 +45,13 @@ namespace WindowsFormsApp1
                  listBox1.Items.Clear();
                  listBox1.Items.Add($"Владелец: {accc.fio}, счет: {accc.sum}");
                  accc.Notify -= DisplayMessage;   // Добавляем обработчик для события Notify
-             }
+                new ToastContentBuilder()
+                .AddText($"Владелец счета: {accc.fio}, счет: {accc.sum}")
+                .Show();
+            }
         }
+
+
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
@@ -56,6 +65,12 @@ namespace WindowsFormsApp1
             listBox1.Items.Clear();
             listBox1.Items.Add($"Владелец: {accc.fio}, счет: {accc.sum}");
             accc.Notify -= DisplayMessage;   // Добавляем обработчик для события Notify
+                                             
+            new ToastContentBuilder()
+                .AddText($"Владелец: {accc.fio}, счет: {accc.sum}")
+                .AddText($"К счету добавленно {}")
+                .Show();
+
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
